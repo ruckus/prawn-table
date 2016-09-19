@@ -184,7 +184,7 @@ module Prawn
         when Prawn::Table
           Cell::Subtable.new(pdf, at, options)
         when Array
-          subtable = Prawn::Table.new(options[:content], pdf, {})
+          subtable = Prawn::Table.new(options[:content], pdf, options.except(:content))
           Cell::Subtable.new(pdf, at, options.merge(:content => subtable))
         else
           raise Errors::UnrecognizedTableContent
@@ -219,7 +219,9 @@ module Prawn
         @rowspan = 1
         @dummy_cells = []
 
-        options.each { |k, v| send("#{k}=", v) }
+        options.each do |k, v|
+          send("#{k}=", v)
+        end
 
         @initializer_run = true
       end
